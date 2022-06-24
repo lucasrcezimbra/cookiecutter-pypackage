@@ -9,5 +9,5 @@
   "version": "0.0.1",
   "use_black": "n",
   "command_line_interface": ["No command-line interface", "Click", "Argparse"],
-  "open_source_license": ["MIT license", "BSD license", "ISC license", "Apache Software License 2.0", "GNU General Public License v3", "Not open source"]
+  "open_source_license": ["GNU Lesser General Public License v2.1", "MIT license", "BSD license", "ISC license", "Apache Software License 2.0", "GNU General Public License v3", "Not open source"]
 }

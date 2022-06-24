@@ -15,6 +15,7 @@ requirements = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'C
 test_requirements = ['pytest']
 
 {%- set license_classifiers = {
+    'GNU Lesser General Public License v2.1': 'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
     'MIT license': 'License :: OSI Approved :: MIT License',
     'BSD license': 'License :: OSI Approved :: BSD License',
     'ISC license': 'License :: OSI Approved :: ISC License (ISCL)',
