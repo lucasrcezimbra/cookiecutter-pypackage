@@ -29,4 +29,4 @@ jobs:
     - name: Upload coverage data to coveralls.io
       run: coveralls --service=github
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}
