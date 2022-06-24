@@ -4,4 +4,4 @@ Changelog
 
 {{ cookiecutter.version }} ({% now 'local' %})
 ------------
--* First release on PyPI.
+- First release on PyPI.
