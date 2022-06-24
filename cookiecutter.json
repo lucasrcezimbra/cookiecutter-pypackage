@@ -7,7 +7,6 @@
   "project_short_description": "Python Boilerplate contains all the boilerplate you need to create a Python package.",
   "pypi_username": "Lrcezimbra",
   "version": "0.0.1",
-  "use_pytest": "y",
   "use_black": "n",
   "command_line_interface": ["No command-line interface", "Click", "Argparse"],
   "create_author_file": "n",

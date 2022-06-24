@@ -198,7 +198,6 @@ def test_bake_not_open_source(cookies):
 def test_using_pytest(cookies):
     with bake_in_temp_dir(
         cookies,
-        extra_context={'use_pytest': 'y'}
     ) as result:
         assert result.project.isdir()
         test_file_path = result.project.join(

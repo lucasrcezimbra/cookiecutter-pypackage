@@ -9,7 +9,8 @@ Sphinx==1.8.5
 twine==1.14.0
 {% if cookiecutter.command_line_interface|lower == 'click' -%}
 Click==7.1.2{% endif %}
-{% if cookiecutter.use_pytest == 'y' -%}
-pytest==6.2.4{% endif %}
+pytest==7.1.2
+pytest-cov==3.0.0
+pytest-mock==3.7.0
 {% if cookiecutter.use_black == 'y' -%}
 black==21.7b0{% endif %}
