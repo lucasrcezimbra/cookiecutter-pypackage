@@ -13,7 +13,33 @@
 
 {{ cookiecutter.project_short_description }}
 
+
 {% if is_open_source %}
-- Free software: {{ cookiecutter.open_source_license }}
 - Documentation: https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io.
+
+
+## Installation
+
+```bash
+pip install {{ cookiecutter.project_slug }}
+```
 {% endif %}
+
+
+## How to Use
+
+
+## Contributing
+Contributions are welcome, feel free to open an Issue or Pull Request.
+
+Pull requests must be for the `develop` branch.
+
+```bash
+git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
+cd {{ cookiecutter.project_slug }}
+git checkout develop
+python -m venv .venv
+pip install -r requirements-dev.txt
+pre-commit install
+pytest
+```
