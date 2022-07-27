@@ -50,3 +50,7 @@ An opinionated Cookiecutter to create a new Python package.
 pip install -U cookiecutter
 cookiecutter https://github.com/lucasrcezimbra/cookiecutter-pypackage
 ```
+
+## TODO
+
+- [] Add Action to upload to PyPI
