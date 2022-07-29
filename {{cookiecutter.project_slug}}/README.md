@@ -39,7 +39,7 @@ git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.
 cd {{ cookiecutter.project_slug }}
 git checkout develop
 python -m venv .venv
-pip install -r requirements-dev.txt
+pip install -r requirements_dev.txt
 pre-commit install
 pytest
 ```
