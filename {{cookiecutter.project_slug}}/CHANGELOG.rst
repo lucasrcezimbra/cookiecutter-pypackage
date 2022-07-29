@@ -1,8 +1,7 @@
-=======
-History
-=======
+=========
+Changelog
+=========
 
-{{ cookiecutter.version }} ({% now 'local' %})
-------------------
-
+(unreleased)
+------------
 * First release on PyPI.
