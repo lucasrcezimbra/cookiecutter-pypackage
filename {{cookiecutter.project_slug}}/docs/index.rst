@@ -6,9 +6,8 @@ Welcome to {{ cookiecutter.project_name }}'s documentation!
    :caption: Contents:
 
    readme
-   usage
    modules
-   history
+   changelog
 
 Indices and tables
 ==================
