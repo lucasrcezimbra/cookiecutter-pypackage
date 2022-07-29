@@ -10,18 +10,15 @@ An opinionated Cookiecutter to create a new Python package.
 
 
 ```
-├── CHANGELOG.md
+├── CHANGELOG.rst
 ├── docs
+│   ├── changelog.rst
 │   ├── conf.py
-│   ├── contributing.rst
-│   ├── history.rst
 │   ├── index.rst
-│   ├── installation.rst
 │   ├── make.bat
 │   ├── Makefile
 │   ├── readme.rst
 │   └── usage.rst
-├── .editorconfig
 ├── .github
 │   ├── dependabot.yml
 │   └── workflows
@@ -33,7 +30,7 @@ An opinionated Cookiecutter to create a new Python package.
 ├── python_boilerplate
 │   ├── __init__.py
 │   └── python_boilerplate.py
-├── README.md
+├── README.rst
 ├── requirements_dev.txt
 ├── setup.cfg
 ├── setup.py
