@@ -1,0 +1,92 @@
+{%- set license_classifiers = {
+    'GNU Lesser General Public License v2.1': 'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
+    'MIT license': 'License :: OSI Approved :: MIT License',
+    'BSD license': 'License :: OSI Approved :: BSD License',
+    'ISC license': 'License :: OSI Approved :: ISC License (ISCL)',
+    'Apache Software License 2.0': 'License :: OSI Approved :: Apache Software License',
+    'GNU General Public License v3': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
+} %}
+[project]
+name="{{ cookiecutter.project_slug }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.project_short_description }}"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+keywords = ["{{ cookiecutter.project_slug }}"]
+authors = [
+  {name="{{ cookiecutter.full_name.replace('\"', '\\\"') }}", email="{{ cookiecutter.email }}"},
+]
+classifiers = [
+  'Development Status :: 2 - Pre-Alpha',
+  'Intended Audience :: Developers',
+{%- if cookiecutter.open_source_license in license_classifiers %}
+  '{{ license_classifiers[cookiecutter.open_source_license] }}',
+{%- endif %}
+  'Natural Language :: English',
+  'Programming Language :: Python :: 3',
+  'Programming Language :: Python :: 3.7',
+  'Programming Language :: Python :: 3.8',
+  'Programming Language :: Python :: 3.9',
+  'Programming Language :: Python :: 3.10',
+]
+
+[project.urls]
+homepage = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
+documentation = "https://{{ cookiecutter.project_slug }}.readthedocs.io/"
+repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
+changelog = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/blob/main/CHANGELOG.md"
+
+dependencies = []
+
+[project.optional-dependencies]
+test = [
+  "pytest"
+]
+build = [
+  "flit>=3.4"
+]
+
+[build-system]
+requires = ["flit_core>=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "{{ cookiecutter.project_slug }}"
+
+[tool.flit.sdist]
+include = ["LICENSE", "README.md"]
+exclude = ["contrib", "docs", "pytest.ini", "tox.ini", "test*"]
+
+[tool.pytest.ini_options]
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py36, py37, py38, flake8
+
+[travis]
+python =
+    3.8: py38
+    3.7: py37
+    3.6: py36
+
+[testenv:flake8]
+basepython = python
+deps = flake8
+commands = flake8 ultratenant tests
+
+[testenv]
+setenv =
+    PYTHONPATH = {toxinidir}
+deps =
+    -r{toxinidir}/requirements_dev.txt
+; If you want to make tox run the tests with the same versions, create a
+; requirements.txt with the pinned versions and uncomment the following line:
+;     -r{toxinidir}/requirements.txt
+commands =
+    pip install -U pip
+    pytest --basetemp={envtmpdir}
+
+"""
