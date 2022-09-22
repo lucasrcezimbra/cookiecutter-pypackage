@@ -28,12 +28,11 @@ pip install {{ cookiecutter.project_slug }}
 
 
 ## Contributing
-------------
+
 Contributions are welcome, feel free to open an Issue or Pull Request.
 
 Pull requests must be for the `develop` branch.
 
-.. code:: bash
 ```
 git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
 cd {{ cookiecutter.project_slug }}
