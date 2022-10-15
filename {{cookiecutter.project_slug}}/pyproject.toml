@@ -30,14 +30,13 @@ classifiers = [
   'Programming Language :: Python :: 3.9',
   'Programming Language :: Python :: 3.10',
 ]
+dependencies = []
 
 [project.urls]
 homepage = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
 documentation = "https://{{ cookiecutter.project_slug }}.readthedocs.io/"
 repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
 changelog = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/blob/main/CHANGELOG.md"
-
-dependencies = []
 
 [project.optional-dependencies]
 build = [
