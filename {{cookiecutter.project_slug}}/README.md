@@ -38,6 +38,7 @@ git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.
 cd {{ cookiecutter.project_slug }}
 git checkout develop
 python -m venv .venv
+source .venv/bin/activate
 pip install .[test]
 pre-commit install
 pytest
