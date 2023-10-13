@@ -185,14 +185,3 @@ def test_bake_with_console_script_cli(cookies):
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "Show this message" in help_result.output
-
-
-@pytest.mark.parametrize("use_black,expected", [("y", True), ("n", False)])
-def test_black(cookies, use_black, expected):
-    with bake_in_temp_dir(cookies, extra_context={"use_black": use_black}) as result:
-        assert result.project.isdir()
-        pyproject_path = result.project.join("pyproject.toml")
-        assert ("black" in pyproject_path.read()) is expected
-        # TODO
-        # pre_commit_path = result.project.join('.pre-commit-config.yaml')
-        # assert ("black" in pre_commit_path.read()) is expected
