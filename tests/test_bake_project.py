@@ -1,16 +1,12 @@
-from contextlib import contextmanager
-import shlex
-import os
-import sys
-import subprocess
-import yaml
-import datetime
-import pytest
-from cookiecutter.utils import rmtree
-
-from click.testing import CliRunner
-
 import importlib
+import os
+import shlex
+import subprocess
+from contextlib import contextmanager
+
+import pytest
+from click.testing import CliRunner
+from cookiecutter.utils import rmtree
 
 
 @contextmanager
@@ -72,137 +68,130 @@ def test_bake_with_defaults(cookies):
         assert result.exception is None
 
         found_toplevel_files = [f.basename for f in result.project.listdir()]
-        assert 'pyproject.toml' in found_toplevel_files
-        assert 'python_boilerplate' in found_toplevel_files
-        assert 'tests' in found_toplevel_files
+        assert "pyproject.toml" in found_toplevel_files
+        assert "python_boilerplate" in found_toplevel_files
+        assert "tests" in found_toplevel_files
 
 
-@pytest.mark.skip('TODO: fix')
+@pytest.mark.skip("TODO: fix")
 def test_bake_and_run_tests(cookies):
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
-        run_inside_dir('python setup.py test', str(result.project)) == 0
+        run_inside_dir("python setup.py test", str(result.project)) == 0
         print("test_bake_and_run_tests path", str(result.project))
 
 
 def test_bake_selecting_license(cookies):
     license_strings = (
         (
-            'GNU Lesser General Public License v2.1',
-            'GNU LESSER GENERAL PUBLIC LICENSE',
-            'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
+            "GNU Lesser General Public License v2.1",
+            "GNU LESSER GENERAL PUBLIC LICENSE",
+            "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
         ),
         (
-            'MIT license',
-            'MIT ',
-            'License :: OSI Approved :: MIT License',
+            "MIT license",
+            "MIT ",
+            "License :: OSI Approved :: MIT License",
         ),
         (
-            'GNU General Public License v3',
-            'GNU GENERAL PUBLIC LICENSE',
-            'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+            "GNU General Public License v3",
+            "GNU GENERAL PUBLIC LICENSE",
+            "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         ),
     )
     for license, target_string, classifier in license_strings:
         with bake_in_temp_dir(
-            cookies,
-            extra_context={'open_source_license': license}
+            cookies, extra_context={"open_source_license": license}
         ) as result:
-            assert target_string in result.project.join('LICENSE').read()
-            assert classifier in result.project.join('pyproject.toml').read()
+            assert target_string in result.project.join("LICENSE").read()
+            assert classifier in result.project.join("pyproject.toml").read()
 
 
 def test_bake_not_open_source(cookies):
     with bake_in_temp_dir(
-        cookies,
-        extra_context={'open_source_license': 'Not open source'}
+        cookies, extra_context={"open_source_license": "Not open source"}
     ) as result:
         found_toplevel_files = [f.basename for f in result.project.listdir()]
-        assert 'LICENSE' not in found_toplevel_files
-        assert 'License' not in result.project.join('README.md').read()
-        assert 'License' not in result.project.join('pyproject.toml').read()
+        assert "LICENSE" not in found_toplevel_files
+        assert "License" not in result.project.join("README.md").read()
+        assert "License" not in result.project.join("pyproject.toml").read()
 
 
-@pytest.mark.skip('TODO: fixme')
+@pytest.mark.skip("TODO: fixme")
 def test_using_pytest(cookies):
     with bake_in_temp_dir(
         cookies,
     ) as result:
         assert result.project.isdir()
-        test_file_path = result.project.join(
-            'tests/test_python_boilerplate.py'
-        )
+        test_file_path = result.project.join("tests/test_python_boilerplate.py")
         lines = test_file_path.readlines()
-        assert "def test_python_boilerplate():" in ''.join(lines)
+        assert "def test_python_boilerplate():" in "".join(lines)
         # Test the new pytest target
-        run_inside_dir('pytest', str(result.project)) == 0
+        run_inside_dir("pytest", str(result.project)) == 0
 
 
 def test_bake_with_no_console_script(cookies):
-    context = {'command_line_interface': "No command-line interface"}
+    context = {"command_line_interface": "No command-line interface"}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
     found_project_files = os.listdir(project_dir)
     assert "cli.py" not in found_project_files
 
-    pyproject_path = os.path.join(project_path, 'pyproject.toml')
-    with open(pyproject_path, 'r') as setup_file:
-        assert 'Click' not in setup_file.read()
+    pyproject_path = os.path.join(project_path, "pyproject.toml")
+    with open(pyproject_path, "r") as setup_file:
+        assert "Click" not in setup_file.read()
 
 
 def test_bake_with_console_script_files(cookies):
-    context = {'command_line_interface': 'Click'}
+    context = {"command_line_interface": "Click"}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
     found_project_files = os.listdir(project_dir)
     assert "cli.py" in found_project_files
 
-    pyproject_path = os.path.join(project_path, 'pyproject.toml')
-    with open(pyproject_path, 'r') as f:
-        assert 'Click' in f.read()
+    pyproject_path = os.path.join(project_path, "pyproject.toml")
+    with open(pyproject_path, "r") as f:
+        assert "Click" in f.read()
 
 
 def test_bake_with_argparse_console_script_files(cookies):
-    context = {'command_line_interface': 'Argparse'}
+    context = {"command_line_interface": "Argparse"}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
     found_project_files = os.listdir(project_dir)
     assert "cli.py" in found_project_files
 
-    pyproject_path = os.path.join(project_path, 'pyproject.toml')
-    with open(pyproject_path, 'r') as f:
-        assert 'Click' not in f.read()
+    pyproject_path = os.path.join(project_path, "pyproject.toml")
+    with open(pyproject_path, "r") as f:
+        assert "Click" not in f.read()
 
 
 def test_bake_with_console_script_cli(cookies):
-    context = {'command_line_interface': 'Click'}
+    context = {"command_line_interface": "Click"}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
-    module_path = os.path.join(project_dir, 'cli.py')
-    module_name = '.'.join([project_slug, 'cli'])
+    module_path = os.path.join(project_dir, "cli.py")
+    module_name = ".".join([project_slug, "cli"])
     spec = importlib.util.spec_from_file_location(module_name, module_path)
     cli = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cli)
     runner = CliRunner()
     noarg_result = runner.invoke(cli.main)
     assert noarg_result.exit_code == 0
-    noarg_output = ' '.join([
-        'Replace this message by putting your code into',
-        project_slug])
+    noarg_output = " ".join(
+        ["Replace this message by putting your code into", project_slug]
+    )
     assert noarg_output in noarg_result.output
-    help_result = runner.invoke(cli.main, ['--help'])
+    help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
-    assert 'Show this message' in help_result.output
+    assert "Show this message" in help_result.output
 
 
 @pytest.mark.parametrize("use_black,expected", [("y", True), ("n", False)])
 def test_black(cookies, use_black, expected):
-    with bake_in_temp_dir(
-        cookies,
-        extra_context={'use_black': use_black}
-    ) as result:
+    with bake_in_temp_dir(cookies, extra_context={"use_black": use_black}) as result:
         assert result.project.isdir()
-        pyproject_path = result.project.join('pyproject.toml')
+        pyproject_path = result.project.join("pyproject.toml")
         assert ("black" in pyproject_path.read()) is expected
         # TODO
         # pre_commit_path = result.project.join('.pre-commit-config.yaml')
