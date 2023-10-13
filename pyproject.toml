@@ -8,13 +8,11 @@ packages = []
 
 [tool.poetry.dependencies]
 python = "^3.9"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.2"
-cookiecutter = "^2.4.0"
-pytest-cookies = "^0.7.0"
 alabaster = "^0.7.13"
+cookiecutter = "^2.4.0"
+pre-commit = "^3.4.0"
+pytest = "^7.4.2"
+pytest-cookies = "^0.7.0"
 watchdog = "^3.0.0"
 
 [build-system]
