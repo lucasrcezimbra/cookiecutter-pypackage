@@ -1,5 +1,5 @@
 pytest==7.2.1
-tox==3.14.1
+tox==4.11.3
 cookiecutter>=1.4.0
 pytest-cookies==0.6.1
 alabaster==0.7.12
