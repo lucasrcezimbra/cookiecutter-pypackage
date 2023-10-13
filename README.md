@@ -34,10 +34,9 @@ An opinionated Cookiecutter to create a new Python package.
 ├── requirements_dev.txt
 ├── setup.cfg
 ├── setup.py
-├── tests
-│   ├── __init__.py
-│   └── test_python_boilerplate.py
-└── tox.ini
+└── tests
+    ├── __init__.py
+    └── test_python_boilerplate.py
 ```
 
 
