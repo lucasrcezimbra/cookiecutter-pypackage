@@ -9,6 +9,9 @@ packages = []
 [tool.poetry.dependencies]
 python = "^3.11"
 cookiecutter = "^2.5.0"
+
+[tool.poetry.group.dev.dependencies]
+faker = "^24.7.1"
 pre-commit = "^3.4.0"
 pytest = "^7.4.4"
 pytest-cookies = "^0.7.0"
