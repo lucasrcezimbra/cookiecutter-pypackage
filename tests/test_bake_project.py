@@ -102,9 +102,7 @@ def test_bake_with_no_console_script(cookies):
     project_path, _, project_dir = project_info(result)
 
     assert not any(f.name == "cli.py" for f in project_dir.iterdir())
-
-    with open(project_path / "pyproject.toml") as setup_file:
-        assert "Click" not in setup_file.read()
+    assert "Click" not in (project_path / "pyproject.toml").read_text()
 
 
 def test_bake_with_console_script_files(cookies):
@@ -113,9 +111,7 @@ def test_bake_with_console_script_files(cookies):
     project_path, _, project_dir = project_info(result)
 
     assert any(f.name == "cli.py" for f in project_dir.iterdir())
-
-    with open(project_path / "pyproject.toml") as f:
-        assert "Click" in f.read()
+    assert "Click" in (project_path / "pyproject.toml").read_text()
 
 
 def test_bake_with_argparse_console_script_files(cookies):
@@ -124,9 +120,7 @@ def test_bake_with_argparse_console_script_files(cookies):
     project_path, _, project_dir = project_info(result)
 
     assert any(f.name == "cli.py" for f in project_dir.iterdir())
-
-    with open(project_path / "pyproject.toml") as f:
-        assert "Click" not in f.read()
+    assert "Click" not in (project_path / "pyproject.toml").read_text()
 
 
 def test_bake_with_console_script_cli(cookies):
