@@ -3,6 +3,7 @@ import os
 import shlex
 import subprocess
 from contextlib import contextmanager
+from pathlib import Path
 
 import pytest
 from click.testing import CliRunner
@@ -55,9 +56,9 @@ def check_output_inside_dir(command, dirpath):
 
 def project_info(result):
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
-    project_path = str(result.project)
+    project_path = Path(result.project)
     project_slug = os.path.split(project_path)[-1]
-    project_dir = os.path.join(project_path, project_slug)
+    project_dir = project_path / project_slug
     return project_path, project_slug, project_dir
 
 
@@ -133,46 +134,42 @@ def test_using_pytest(cookies):
 def test_bake_with_no_console_script(cookies):
     context = {"command_line_interface": "No command-line interface"}
     result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    found_project_files = os.listdir(project_dir)
-    assert "cli.py" not in found_project_files
+    project_path, _, project_dir = project_info(result)
 
-    pyproject_path = os.path.join(project_path, "pyproject.toml")
-    with open(pyproject_path, "r") as setup_file:
+    assert not any(f.name == "cli.py" for f in project_dir.iterdir())
+
+    with open(project_path / "pyproject.toml") as setup_file:
         assert "Click" not in setup_file.read()
 
 
 def test_bake_with_console_script_files(cookies):
     context = {"command_line_interface": "Click"}
     result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    found_project_files = os.listdir(project_dir)
-    assert "cli.py" in found_project_files
+    project_path, _, project_dir = project_info(result)
 
-    pyproject_path = os.path.join(project_path, "pyproject.toml")
-    with open(pyproject_path, "r") as f:
+    assert any(f.name == "cli.py" for f in project_dir.iterdir())
+
+    with open(project_path / "pyproject.toml") as f:
         assert "Click" in f.read()
 
 
 def test_bake_with_argparse_console_script_files(cookies):
     context = {"command_line_interface": "Argparse"}
     result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    found_project_files = os.listdir(project_dir)
-    assert "cli.py" in found_project_files
+    project_path, _, project_dir = project_info(result)
 
-    pyproject_path = os.path.join(project_path, "pyproject.toml")
-    with open(pyproject_path, "r") as f:
+    assert any(f.name == "cli.py" for f in project_dir.iterdir())
+
+    with open(project_path / "pyproject.toml") as f:
         assert "Click" not in f.read()
 
 
 def test_bake_with_console_script_cli(cookies):
     context = {"command_line_interface": "Click"}
     result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    module_path = os.path.join(project_dir, "cli.py")
+    _, project_slug, project_dir = project_info(result)
     module_name = ".".join([project_slug, "cli"])
-    spec = importlib.util.spec_from_file_location(module_name, module_path)
+    spec = importlib.util.spec_from_file_location(module_name, project_dir / "cli.py")
     cli = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cli)
     runner = CliRunner()
