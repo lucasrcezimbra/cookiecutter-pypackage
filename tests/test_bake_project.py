@@ -141,3 +141,17 @@ def test_bake_with_console_script_cli(cookies):
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "Show this message" in help_result.output
+
+
+def test_github_python_app(cookies, faker):
+    username, project_slug = faker.user_name(), faker.pystr()
+    result = cookies.bake(
+        extra_context={"github_username": username, "project_slug": project_slug}
+    )
+
+    filepath = result.project_path / ".github" / "workflows" / "python-app.yml"
+    content = filepath.read_text()
+
+    assert f"pytest --cov={project_slug}" in content
+    assert "token: ${{ secrets.CODECOV_TOKEN }}" in content
+    assert f"slug: {username}/{project_slug}" in content
