@@ -31,12 +31,9 @@ pip install {{ cookiecutter.project_slug }}
 
 Contributions are welcome, feel free to open an Issue or Pull Request.
 
-Pull requests must be for the `develop` branch.
-
 ```
 git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
 cd {{ cookiecutter.project_slug }}
-git checkout develop
 python -m venv .venv
 source .venv/bin/activate
 pip install .[test]
