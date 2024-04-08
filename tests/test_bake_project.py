@@ -3,7 +3,6 @@ import os
 import shlex
 import subprocess
 from contextlib import contextmanager
-from pathlib import Path
 
 import pytest
 from click.testing import CliRunner
@@ -35,20 +34,18 @@ def run_inside_dir(command, dirpath):
 
 def project_info(result):
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
-    project_path = Path(result.project)
-    project_slug = os.path.split(project_path)[-1]
-    project_dir = project_path / project_slug
-    return project_path, project_slug, project_dir
+    project_slug = os.path.split(result.project_path)[-1]
+    project_dir = result.project_path / project_slug
+    return result.project_path, project_slug, project_dir
 
 
 def test_bake_with_defaults(cookies):
     result = cookies.bake()
 
-    assert result.project.isdir()
     assert result.exit_code == 0
     assert result.exception is None
 
-    found_toplevel_files = [f.basename for f in result.project.listdir()]
+    found_toplevel_files = [f.name for f in result.project_path.iterdir()]
     assert "pyproject.toml" in found_toplevel_files
     assert "python_boilerplate" in found_toplevel_files
     assert "tests" in found_toplevel_files
@@ -74,17 +71,17 @@ def test_bake_selecting_license(cookies):
     )
     for license, target_string, classifier in license_strings:
         result = cookies.bake(extra_context={"open_source_license": license})
-        assert target_string in result.project.join("LICENSE").read()
-        assert classifier in result.project.join("pyproject.toml").read()
+        assert target_string in (result.project_path / "LICENSE").read_text()
+        assert classifier in (result.project_path / "pyproject.toml").read_text()
 
 
 def test_bake_not_open_source(cookies):
     result = cookies.bake(extra_context={"open_source_license": "Not open source"})
 
-    found_toplevel_files = [f.basename for f in result.project.listdir()]
+    found_toplevel_files = [f.name for f in result.project_path.iterdir()]
     assert "LICENSE" not in found_toplevel_files
-    assert "License" not in result.project.join("README.md").read()
-    assert "License" not in result.project.join("pyproject.toml").read()
+    assert "License" not in (result.project_path / "README.md").read_text()
+    assert "License" not in (result.project_path / "pyproject.toml").read_text()
 
 
 @pytest.mark.skip("TODO: fixme")
