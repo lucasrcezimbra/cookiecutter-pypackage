@@ -48,12 +48,6 @@ def run_inside_dir(command, dirpath):
         return subprocess.check_call(shlex.split(command))
 
 
-def check_output_inside_dir(command, dirpath):
-    "Run a command from inside a given directory, returning the command output"
-    with inside_dir(dirpath):
-        return subprocess.check_output(shlex.split(command))
-
-
 def project_info(result):
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
     project_path = Path(result.project)
