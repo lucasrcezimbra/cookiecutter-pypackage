@@ -8,5 +8,6 @@
   "pypi_username": "Lrcezimbra",
   "version": "0.0.1",
   "command_line_interface": ["No command-line interface", "Click", "Argparse"],
-  "open_source_license": ["GNU Lesser General Public License v2.1", "MIT license", "GNU General Public License v3", "Not open source"]
+  "open_source_license": ["GNU Lesser General Public License v2.1", "MIT license", "GNU General Public License v3", "Not open source"],
+  "coverage": ["Codecov", "No"]
 }

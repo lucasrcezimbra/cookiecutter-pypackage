@@ -143,15 +143,40 @@ def test_bake_with_console_script_cli(cookies):
     assert "Show this message" in help_result.output
 
 
-def test_github_python_app(cookies, faker):
+def test_coverage_no(cookies, faker):
+    result = cookies.bake(extra_context={"coverage": "No"})
+
+    workflow_content = (
+        result.project_path / ".github" / "workflows" / "python-app.yml"
+    ).read_text()
+    readme_content = (result.project_path / "README.md").read_text()
+
+    assert "pytest" in workflow_content
+    assert "pytest --cov" not in workflow_content
+    assert "uses: codecov" not in workflow_content
+    assert "codecov" not in readme_content
+
+
+def test_coverage_codecov(cookies, faker):
     username, project_slug = faker.user_name(), faker.pystr()
     result = cookies.bake(
-        extra_context={"github_username": username, "project_slug": project_slug}
+        extra_context={
+            "coverage": "Codecov",
+            "github_username": username,
+            "project_slug": project_slug,
+        }
     )
 
-    filepath = result.project_path / ".github" / "workflows" / "python-app.yml"
-    content = filepath.read_text()
+    workflow_content = (
+        result.project_path / ".github" / "workflows" / "python-app.yml"
+    ).read_text()
+    readme_content = (result.project_path / "README.md").read_text()
 
-    assert f"pytest --cov={project_slug}" in content
-    assert "token: ${{ secrets.CODECOV_TOKEN }}" in content
-    assert f"slug: {username}/{project_slug}" in content
+    assert f"pytest --cov={project_slug}" in workflow_content
+    assert "uses: codecov" in workflow_content
+    assert "token: ${{ secrets.CODECOV_TOKEN }}" in workflow_content
+    assert f"slug: {username}/{project_slug}" in workflow_content
+    assert (
+        f"[![codecov](https://codecov.io/gh/{username}/{project_slug}/graph/badge.svg)](https://codecov.io/gh/{username}/{project_slug})"
+        in readme_content
+    )

@@ -19,8 +19,12 @@ jobs:
           pip install --upgrade ".[test]"
           pre-commit install
       - run: pre-commit run -a
+      {%- if cookiecutter.coverage == 'Codecov' %}
       - run: pytest --cov={{ cookiecutter.project_slug }}
       - uses: codecov/codecov-action@v4.0.1
         with:
           token: {{ "${{ secrets.CODECOV_TOKEN }}" }}
           slug: {{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
+      {% else %}
+      - run: pytest
+      {% endif %}
