@@ -36,9 +36,7 @@ Contributions are welcome, feel free to open an Issue or Pull Request.
 ```
 git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
 cd {{ cookiecutter.project_slug }}
-python -m venv .venv
-source .venv/bin/activate
-pip install .[test]
+poetry install
 pre-commit install
-pytest
+poetry run pytest
 ```

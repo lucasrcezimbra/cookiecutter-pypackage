@@ -3,6 +3,7 @@ import os
 import shlex
 import subprocess
 from contextlib import contextmanager
+from textwrap import dedent
 
 import pytest
 from click.testing import CliRunner
@@ -143,7 +144,7 @@ def test_bake_with_console_script_cli(cookies):
     assert "Show this message" in help_result.output
 
 
-def test_coverage_no(cookies, faker):
+def test_coverage_no(cookies):
     result = cookies.bake(extra_context={"coverage": "No"})
 
     workflow_content = (
@@ -180,3 +181,139 @@ def test_coverage_codecov(cookies, faker):
         f"[![codecov](https://codecov.io/gh/{username}/{project_slug}/graph/badge.svg)](https://codecov.io/gh/{username}/{project_slug})"
         in readme_content
     )
+
+
+def test_pyproject_build_system(cookies):
+    result = cookies.bake()
+
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+
+    assert pyproject.startswith(
+        dedent(
+            """\
+        [build-system]
+        requires = ["poetry-core"]
+        build-backend = "poetry.core.masonry.api"
+   """
+        )
+    )
+
+
+def test_pyproject_tool_poetry(cookies, faker):
+    username, slug, description, version, name, email = (
+        faker.user_name(),
+        faker.pystr(),
+        faker.sentence(),
+        faker.pyint(),
+        faker.pystr(),
+        faker.email(),
+    )
+
+    result = cookies.bake(
+        extra_context={
+            "full_name": name,
+            "email": email,
+            "github_username": username,
+            "project_slug": slug,
+            "project_short_description": description,
+            "version": version,
+        }
+    )
+
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+
+    expected = dedent(
+        f"""\
+        [tool.poetry]
+        name = "{slug}"
+        description = "{description}"
+        version = "{version}"
+        keywords = ["{slug}"]
+        license = "LICENSE"
+        readme = "README.md"
+        include = ["LICENSE", "README.md"]
+        exclude = ["contrib", "docs", "test*"]
+        homepage = "https://github.com/{username}/{slug}"
+        documentation = "https://{slug}.readthedocs.io/"
+        repository = "https://github.com/{username}/{slug}"
+        authors = [
+          "{name} <{email}>",
+        ]
+        packages = [
+          {{ include = "{slug}" }},
+        ]
+    """
+    )
+    assert expected in pyproject
+
+
+def test_pyproject_dependencies(cookies):
+    result = cookies.bake()
+
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+
+    expected = dedent(
+        """\
+        [tool.poetry.dependencies]
+        python = ">=3.9"
+    """
+    )
+    assert expected in pyproject
+
+
+def test_pyproject_dev_dependencies(cookies):
+    result = cookies.bake()
+
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+
+    expected = dedent(
+        """\
+        [tool.poetry.group.dev.dependencies]
+        build = "1.2.1"
+        bump2version = "1.0.1"
+        coverage = "7.4.4"
+        faker = "24.8.0"
+        pre-commit = "3.7.0"
+        pytest = "8.1.1"
+        pytest-cov = "5.0.0"
+        pytest-mock = "3.14.0"
+    """
+    )
+    assert expected in pyproject
+
+
+def test_pyproject_docs_dependencies(cookies):
+    result = cookies.bake()
+
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+
+    expected = dedent(
+        """\
+        [tool.poetry.group.docs.dependencies]
+        myst-parser = "2.0.0"
+        Sphinx = "7.2.6"
+        sphinx-rtd-theme = "2.0.0"
+    """
+    )
+    assert expected in pyproject
+
+
+def test_pyproject_tools(cookies):
+    result = cookies.bake()
+
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+
+    expected = dedent(
+        """\
+        [tool.pytest.ini_options]
+        python_files = ["tests.py", "test_*.py", "*_tests.py"]
+        addopts = "--doctest-modules"
+
+
+        [tool.ruff]
+        select = ["E", "F", "I"]
+        ignore = ["E501"]
+        line-length = 88
+    """
+    )
+    assert expected in pyproject
