@@ -43,6 +43,6 @@ An opinionated Cookiecutter to create a new Python package.
 ## How to Use
 
 ```bash
-pip install -U cookiecutter
+pipx install cookiecutter
 cookiecutter https://github.com/lucasrcezimbra/cookiecutter-pypackage
 ```
