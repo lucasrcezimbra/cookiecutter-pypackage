@@ -10,33 +10,33 @@ An opinionated Cookiecutter to create a new Python package.
 
 
 ```
-├── CHANGELOG.rst
+├── CHANGELOG.md
 ├── docs
-│   ├── changelog.rst
+│   ├── changelog.md
 │   ├── conf.py
 │   ├── index.rst
 │   ├── make.bat
 │   ├── Makefile
-│   ├── readme.rst
-│   └── usage.rst
+│   └── readme.md
 ├── .github
 │   ├── dependabot.yml
 │   └── workflows
-│       └── python-app.yml
+│       ├── python-app.yml
+│       └── python-publish.yml
 ├── .gitignore
 ├── LICENSE
-├── MANIFEST.in
+├── poetry.lock
 ├── .pre-commit-config.yaml
+├── pyproject.toml
 ├── python_boilerplate
 │   ├── __init__.py
 │   └── python_boilerplate.py
-├── README.rst
-├── requirements_dev.txt
+├── README.md
+├── .readthedocs.yaml
 ├── setup.cfg
-├── setup.py
 └── tests
-    ├── __init__.py
-    └── test_python_boilerplate.py
+    ├── __init__.py
+    └── test_python_boilerplate.py
 ```
 
 
