@@ -1,2 +1,2 @@
-def test_{{ cookiecutter.project_slug }}():
+def test_{{ cookiecutter.namespace }}():
     assert True

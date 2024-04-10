@@ -6,13 +6,13 @@
 {% if cookiecutter.coverage == "Codecov" %}
 [![codecov](https://codecov.io/gh/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/graph/badge.svg)](https://codecov.io/gh/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }})
 {% endif %}
-[![Documentation Status](https://readthedocs.org/projects/{{ cookiecutter.project_slug | replace("_", "-") }}/badge/?version=latest)](https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io/en/latest/?version=latest)
+[![Documentation Status](https://readthedocs.org/projects/{{ cookiecutter.project_slug }}/badge/?version=latest)](https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io/en/latest/?version=latest)
 {%- endif %}
 
 {{ cookiecutter.project_short_description }}
 
 {% if is_open_source %}
-* Documentation: https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io.
+* Documentation: https://{{ cookiecutter.project_slug }}.readthedocs.io.
 
 
 ## Installation

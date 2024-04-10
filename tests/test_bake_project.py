@@ -11,10 +11,6 @@ from click.testing import CliRunner
 
 @contextmanager
 def inside_dir(dirpath):
-    """
-    Execute code from inside the given directory
-    :param dirpath: String, path of the directory the command is being run.
-    """
     old_path = os.getcwd()
     try:
         os.chdir(dirpath)
@@ -24,20 +20,14 @@ def inside_dir(dirpath):
 
 
 def run_inside_dir(command, dirpath):
-    """
-    Run a command from inside a given directory, returning the exit status
-    :param command: Command that will be executed
-    :param dirpath: String, path of the directory the command is being run.
-    """
     with inside_dir(dirpath):
         return subprocess.check_call(shlex.split(command))
 
 
 def project_info(result):
-    """Get toplevel dir, project_slug, and project dir from baked cookies"""
-    project_slug = os.path.split(result.project_path)[-1]
-    project_dir = result.project_path / project_slug
-    return result.project_path, project_slug, project_dir
+    namespace = result.context["namespace"]
+    project_dir = result.project_path / namespace
+    return result.project_path, namespace, project_dir
 
 
 def test_bake_with_defaults(cookies):
@@ -127,8 +117,8 @@ def test_bake_with_argparse_console_script_files(cookies):
 def test_bake_with_console_script_cli(cookies):
     context = {"command_line_interface": "Click"}
     result = cookies.bake(extra_context=context)
-    _, project_slug, project_dir = project_info(result)
-    module_name = ".".join([project_slug, "cli"])
+    _, namespace, project_dir = project_info(result)
+    module_name = ".".join([namespace, "cli"])
     spec = importlib.util.spec_from_file_location(module_name, project_dir / "cli.py")
     cli = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cli)
@@ -136,7 +126,10 @@ def test_bake_with_console_script_cli(cookies):
     noarg_result = runner.invoke(cli.main)
     assert noarg_result.exit_code == 0
     noarg_output = " ".join(
-        ["Replace this message by putting your code into", project_slug]
+        [
+            "Replace this message by putting your code into",
+            result.context["project_slug"],
+        ]
     )
     assert noarg_output in noarg_result.output
     help_result = runner.invoke(cli.main, ["--help"])
@@ -159,12 +152,13 @@ def test_coverage_no(cookies):
 
 
 def test_coverage_codecov(cookies, faker):
-    username, project_slug = faker.user_name(), faker.pystr()
+    username, project_slug, namespace = faker.user_name(), faker.pystr(), faker.pystr()
     result = cookies.bake(
         extra_context={
             "coverage": "Codecov",
             "github_username": username,
             "project_slug": project_slug,
+            "namespace": namespace,
         }
     )
 
@@ -173,7 +167,7 @@ def test_coverage_codecov(cookies, faker):
     ).read_text()
     readme_content = (result.project_path / "README.md").read_text()
 
-    assert f"pytest --cov={project_slug}" in workflow_content
+    assert f"pytest --cov={namespace}" in workflow_content
     assert "uses: codecov" in workflow_content
     assert "token: ${{ secrets.CODECOV_TOKEN }}" in workflow_content
     assert f"slug: {username}/{project_slug}" in workflow_content
@@ -200,47 +194,38 @@ def test_pyproject_build_system(cookies):
 
 
 def test_pyproject_tool_poetry(cookies, faker):
-    username, slug, description, version, name, email = (
-        faker.user_name(),
-        faker.pystr(),
-        faker.sentence(),
-        faker.pyint(),
-        faker.pystr(),
-        faker.email(),
-    )
-
-    result = cookies.bake(
-        extra_context={
-            "full_name": name,
-            "email": email,
-            "github_username": username,
-            "project_slug": slug,
-            "project_short_description": description,
-            "version": version,
-        }
-    )
+    context = {
+        "full_name": faker.name(),
+        "email": faker.email(),
+        "github_username": faker.user_name(),
+        "project_slug": faker.pystr(),
+        "namespace": faker.pystr(),
+        "project_short_description": faker.sentence(),
+        "version": faker.pyint(),
+    }
+    result = cookies.bake(extra_context=context)
 
     pyproject = (result.project_path / "pyproject.toml").read_text()
 
     expected = dedent(
         f"""\
         [tool.poetry]
-        name = "{slug}"
-        description = "{description}"
-        version = "{version}"
-        keywords = ["{slug}"]
+        name = "{context['project_slug']}"
+        description = "{context['project_short_description']}"
+        version = "{context['version']}"
+        keywords = ["{context['project_slug']}"]
         license = "LICENSE"
         readme = "README.md"
         include = ["LICENSE", "README.md"]
         exclude = ["contrib", "docs", "test*"]
-        homepage = "https://github.com/{username}/{slug}"
-        documentation = "https://{slug}.readthedocs.io/"
-        repository = "https://github.com/{username}/{slug}"
+        homepage = "https://github.com/{context['github_username']}/{context['project_slug']}"
+        documentation = "https://{context['project_slug']}.readthedocs.io/"
+        repository = "https://github.com/{context['github_username']}/{context['project_slug']}"
         authors = [
-          "{name} <{email}>",
+          "{context['full_name']} <{context['email']}>",
         ]
         packages = [
-          {{ include = "{slug}" }},
+          {{ include = "{context['namespace']}" }},
         ]
     """
     )
