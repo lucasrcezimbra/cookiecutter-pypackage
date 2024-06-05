@@ -224,13 +224,13 @@ files = [
 
 [[package]]
 name = "faker"
-version = "25.0.1"
+version = "25.5.0"
 description = "Faker is a Python package that generates fake data for you."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Faker-25.0.1-py3-none-any.whl", hash = "sha256:6737cc6d591cd83421fdc5e494f6e2c1a6e32266214f158b745aa9fa15687c98"},
-    {file = "Faker-25.0.1.tar.gz", hash = "sha256:c153505618801f1704807b258a6010ea8cabf91f66f4788939bfdba83b887e76"},
+    {file = "Faker-25.5.0-py3-none-any.whl", hash = "sha256:edb85040a47ef1b30ccd8c4b6f07ee3cb4bd64aab1483be4efe75816ee2e2e36"},
+    {file = "Faker-25.5.0.tar.gz", hash = "sha256:84d454fc9fef0b73428e00bdf45a36c04568c75f22727e990071580840cfbb84"},
 ]
 
 [package.dependencies]
@@ -751,4 +751,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "38588869274a794dae951e93c41d0e0f3583a0215c9a347b691a847b6e5c8a1f"
+content-hash = "ca38b107c84b4ec1ad7edf55a9b58279d5eea8feb980ff922a29f0fb8e97cdf7"
