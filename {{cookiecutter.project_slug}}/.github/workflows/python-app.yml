@@ -20,7 +20,7 @@ jobs:
           poetry run pre-commit install
       - run: poetry run pre-commit run -a
       {%- if cookiecutter.coverage == 'Codecov' %}
-      - run: poetry run pytest --cov={{ cookiecutter.project_slug }}
+      - run: poetry run pytest --cov={{ cookiecutter.namespace }}
       - uses: codecov/codecov-action@v4.0.1
         with:
           token: {{ "${{ secrets.CODECOV_TOKEN }}" }}

@@ -25,7 +25,7 @@ authors = [
   "{{ cookiecutter.full_name.replace('\"', '\\\"') }} <{{ cookiecutter.email }}>",
 ]
 packages = [
-  { include = "{{ cookiecutter.project_slug }}" },
+  { include = "{{ cookiecutter.namespace }}" },
 ]
 classifiers = [
   'Development Status :: 2 - Pre-Alpha',
