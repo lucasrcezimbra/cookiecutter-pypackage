@@ -128,7 +128,7 @@ def test_bake_with_console_script_cli(cookies):
     noarg_output = " ".join(
         [
             "Replace this message by putting your code into",
-            result.context["project_slug"],
+            result.context["namespace"],
         ]
     )
     assert noarg_output in noarg_result.output
