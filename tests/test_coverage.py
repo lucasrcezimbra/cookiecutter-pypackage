@@ -12,7 +12,7 @@ def test_coverage_no(cookies):
 
     with open(result.project / "Makefile") as f:
         content = f.read()
-        assert ".PHONY: lint run test\n" in content
+        assert ".PHONY: build lint run test\n" in content
         assert "cov" not in content
 
 
@@ -35,6 +35,6 @@ def test_coverage_codecov(cookies):
 
     with open(result.project / "Makefile") as f:
         content = f.read()
-        assert ".PHONY: lint run test test-cov\n" in content
+        assert ".PHONY: build lint run test test-cov\n" in content
         assert "test-cov:" in content
         assert "poetry run pytest --cov=python_boilerplate" in content

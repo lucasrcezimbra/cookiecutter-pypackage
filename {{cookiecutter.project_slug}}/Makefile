@@ -1,4 +1,7 @@
-.PHONY: lint run test{% if cookiecutter.coverage == "Codecov" %} test-cov{% endif %}
+.PHONY: build lint run test{% if cookiecutter.coverage == "Codecov" %} test-cov{% endif %}
+
+build:
+	poetry run python -m build
 
 install:
 	poetry install
