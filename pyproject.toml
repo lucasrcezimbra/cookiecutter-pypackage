@@ -11,7 +11,7 @@ python = "^3.11"
 cookiecutter = "^2.6.0"
 
 [tool.poetry.group.dev.dependencies]
-faker = "^33.1.0"
+faker = "^37.0.1"
 pre-commit = "^4.0.1"
 pytest = "^8.3.4"
 pytest-cookies = "^0.7.0"
