@@ -8,7 +8,7 @@
   "project_short_description": "Python Boilerplate contains all the boilerplate you need to create a Python package.",
   "pypi_username": "Lrcezimbra",
   "version": "0.0.1",
-  "command_line_interface": ["No command-line interface", "Click", "Argparse"],
+  "command_line_interface": ["No command-line interface", "Click", "Argparse", "Typer"],
   "open_source_license": ["GNU Lesser General Public License v2.1", "MIT license", "GNU General Public License v3", "Not open source"],
   "coverage": ["Codecov", "No"]
 }

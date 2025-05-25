@@ -114,6 +114,16 @@ def test_bake_with_argparse_console_script_files(cookies):
     assert "Click" not in (project_path / "pyproject.toml").read_text()
 
 
+def test_bake_with_typer_console_script_files(cookies):
+    context = {"command_line_interface": "Typer"}
+    result = cookies.bake(extra_context=context)
+    project_path, _, project_dir = project_info(result)
+
+    assert any(f.name == "cli.py" for f in project_dir.iterdir())
+    assert "typer" in (project_path / "pyproject.toml").read_text()
+    assert "Click" not in (project_path / "pyproject.toml").read_text()
+
+
 def test_bake_with_console_script_cli(cookies):
     context = {"command_line_interface": "Click"}
     result = cookies.bake(extra_context=context)
@@ -135,6 +145,33 @@ def test_bake_with_console_script_cli(cookies):
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "Show this message" in help_result.output
+
+
+def test_bake_with_typer_console_script_cli(cookies):
+    """Test the Typer CLI."""
+    try:
+        import typer
+        from typer.testing import CliRunner
+
+        context = {"command_line_interface": "Typer"}
+        result = cookies.bake(extra_context=context)
+        _, namespace, project_dir = project_info(result)
+        module_name = ".".join([namespace, "cli"])
+        spec = importlib.util.spec_from_file_location(module_name, project_dir / "cli.py")
+        cli = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cli)
+        runner = CliRunner()
+        result = runner.invoke(cli.app)
+        assert result.exit_code == 0
+        output = " ".join(
+            [
+                "Replace this message by putting your code into",
+                namespace,
+            ]
+        )
+        assert output in result.stdout
+    except ImportError:
+        pytest.skip("Typer not available")
 
 
 def test_pyproject_build_system(cookies):
