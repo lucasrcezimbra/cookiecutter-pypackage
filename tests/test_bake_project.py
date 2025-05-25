@@ -94,6 +94,10 @@ def test_bake_with_no_console_script(cookies):
 
     assert not any(f.name == "cli.py" for f in project_dir.iterdir())
     assert "Click" not in (project_path / "pyproject.toml").read_text()
+    
+    # Check that script entry points are not present
+    pyproject_content = (project_path / "pyproject.toml").read_text()
+    assert "tool.poetry.scripts" not in pyproject_content
 
 
 def test_bake_with_console_script_files(cookies):
@@ -103,6 +107,10 @@ def test_bake_with_console_script_files(cookies):
 
     assert any(f.name == "cli.py" for f in project_dir.iterdir())
     assert "Click" in (project_path / "pyproject.toml").read_text()
+    
+    # Check for correct script entry point
+    pyproject_content = (project_path / "pyproject.toml").read_text()
+    assert "python-boilerplate = \"python_boilerplate.cli:main\"" in pyproject_content
 
 
 def test_bake_with_argparse_console_script_files(cookies):
@@ -112,6 +120,10 @@ def test_bake_with_argparse_console_script_files(cookies):
 
     assert any(f.name == "cli.py" for f in project_dir.iterdir())
     assert "Click" not in (project_path / "pyproject.toml").read_text()
+    
+    # Check for correct script entry point
+    pyproject_content = (project_path / "pyproject.toml").read_text()
+    assert "python-boilerplate = \"python_boilerplate.cli:main\"" in pyproject_content
 
 
 def test_bake_with_typer_console_script_files(cookies):
@@ -122,6 +134,10 @@ def test_bake_with_typer_console_script_files(cookies):
     assert any(f.name == "cli.py" for f in project_dir.iterdir())
     assert "typer" in (project_path / "pyproject.toml").read_text()
     assert "Click" not in (project_path / "pyproject.toml").read_text()
+    
+    # Check for correct script entry point
+    pyproject_content = (project_path / "pyproject.toml").read_text()
+    assert "python-boilerplate = \"python_boilerplate.cli:app\"" in pyproject_content
 
 
 def test_bake_with_console_script_cli(cookies):
