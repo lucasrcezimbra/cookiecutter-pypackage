@@ -217,6 +217,7 @@ def test_pyproject_dev_dependencies(cookies):
         build = "1.2.1"
         bump2version = "1.0.1"
         coverage = "7.4.4"
+        cruft = "2.15.0"
         faker = "24.8.0"
         pre-commit = "3.7.0"
         pytest = "8.1.1"
@@ -262,3 +263,54 @@ def test_pyproject_tools(cookies):
     """
     )
     assert expected in pyproject
+
+
+def test_cruft_integration(cookies):
+    """Test that a project generated with cruft can be properly managed."""
+    # First, test using pytest-cookies to ensure our template has cruft
+    result = cookies.bake()
+    pyproject_content = (result.project_path / "pyproject.toml").read_text()
+    assert (
+        'cruft = "2.15.0"' in pyproject_content
+    ), "cruft should be in dev dependencies"
+
+    # Test README contains cruft documentation
+    readme_content = (result.project_path / "README.md").read_text()
+    assert "cruft check" in readme_content
+    assert "cruft update" in readme_content
+    assert "cruft diff" in readme_content
+
+    # Test cruft can work with the template structure
+    import subprocess
+    import tempfile
+    from pathlib import Path
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Create a project using cruft directly on the current directory
+        result = subprocess.run(
+            ["cruft", "create", ".", "--no-input", "--output-dir", str(temp_dir)],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent,
+        )
+
+        # Check that cruft create was successful
+        assert result.returncode == 0, f"cruft create failed: {result.stderr}"
+
+        # Verify the project was created
+        created_project = Path(temp_dir) / "python-boilerplate"
+        assert created_project.exists(), "Project directory was not created"
+
+        # Verify .cruft.json was created (this is what cruft uses to track the template)
+        cruft_json = created_project / ".cruft.json"
+        assert cruft_json.exists(), ".cruft.json file was not created"
+
+        # Test cruft check command
+        check_result = subprocess.run(
+            ["cruft", "check"], capture_output=True, text=True, cwd=created_project
+        )
+
+        # cruft check should pass (return 0) since we just created the project
+        assert (
+            check_result.returncode == 0
+        ), f"cruft check failed: {check_result.stderr}"
