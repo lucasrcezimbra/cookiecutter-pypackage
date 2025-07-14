@@ -32,7 +32,7 @@ When this template is used, it creates Python packages with:
 - **ReadTheDocs**: Integration ready (`.readthedocs.yaml`)
 
 ### CI/CD
-- **GitHub Actions**: 
+- **GitHub Actions**:
   - `python-app.yml`: Test automation
   - `python-publish.yml`: PyPI publishing
 - **Dependabot**: Automated dependency updates
