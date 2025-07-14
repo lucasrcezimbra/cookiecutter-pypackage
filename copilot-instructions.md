@@ -110,8 +110,6 @@ Key cookiecutter variables (from `cookiecutter.json`):
 1. **Minimal Changes**: Keep the template focused and opinionated
 2. **Testing**: Always test template changes with different variable combinations
 3. **Documentation**: Update README.md when adding features
-4. **Backwards Compatibility**: Consider existing users when making changes
-5. **Modern Python**: Use current Python best practices and tools
 
 ## Development Workflow
 
