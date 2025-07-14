@@ -43,33 +43,33 @@ def test_coverage_codecov(cookies):
 def test_copilot_setup_steps_workflow(cookies):
     """Test that the copilot-setup-steps.yml workflow file is created and has correct content."""
     result = cookies.bake()
-    
+
     workflow_path = result.project / ".github" / "workflows" / "copilot-setup-steps.yml"
     assert workflow_path.exists(), "copilot-setup-steps.yml workflow file should exist"
-    
+
     with open(workflow_path) as f:
         content = f.read()
-        
+
         # Check basic structure
         assert 'name: "Copilot Setup Steps"' in content
-        assert 'copilot-setup-steps:' in content  # job name
-        assert 'runs-on: ubuntu-latest' in content
-        assert 'permissions:' in content
-        assert 'contents: read' in content
-        
+        assert "copilot-setup-steps:" in content  # job name
+        assert "runs-on: ubuntu-latest" in content
+        assert "permissions:" in content
+        assert "contents: read" in content
+
         # Check triggers
-        assert 'workflow_dispatch:' in content
-        assert 'push:' in content
-        assert 'pull_request:' in content
-        assert '.github/workflows/copilot-setup-steps.yml' in content
-        
+        assert "workflow_dispatch:" in content
+        assert "push:" in content
+        assert "pull_request:" in content
+        assert ".github/workflows/copilot-setup-steps.yml" in content
+
         # Check steps
-        assert 'uses: actions/checkout@v4' in content
-        assert 'pipx install poetry' in content
-        assert 'uses: actions/setup-python@v5' in content
+        assert "uses: actions/checkout@v4" in content
+        assert "pipx install poetry" in content
+        assert "uses: actions/setup-python@v5" in content
         assert 'python-version: "3.9"' in content
         assert 'cache: "poetry"' in content
-        assert 'make install' in content
-        
+        assert "make install" in content
+
         # Check that there are no comments (as requested in the issue)
-        assert '#' not in content, "Workflow file should not contain any comments"
+        assert "#" not in content, "Workflow file should not contain any comments"
