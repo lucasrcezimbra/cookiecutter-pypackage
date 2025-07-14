@@ -217,6 +217,7 @@ def test_pyproject_dev_dependencies(cookies):
         build = "1.2.1"
         bump2version = "1.0.1"
         coverage = "7.4.4"
+        cruft = "2.15.0"
         faker = "24.8.0"
         pre-commit = "3.7.0"
         pytest = "8.1.1"
@@ -262,3 +263,19 @@ def test_pyproject_tools(cookies):
     """
     )
     assert expected in pyproject
+
+
+def test_cruft_integration(cookies):
+    """Test that cruft is included as a dev dependency and documented in README."""
+    result = cookies.bake()
+
+    # Check that cruft is in dev dependencies
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+    assert 'cruft = "2.15.0"' in pyproject
+
+    # Check that cruft documentation is in README
+    readme = (result.project_path / "README.md").read_text()
+    assert "cruft" in readme
+    assert "cruft check" in readme
+    assert "cruft update" in readme
+    assert "cookiecutter-pypackage" in readme
