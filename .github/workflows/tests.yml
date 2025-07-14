@@ -15,6 +15,6 @@ jobs:
       - name: Install dependencies
         run: |
           pipx install poetry
-          poetry install
-      - run: poetry run pre-commit run -a
-      - run: poetry run pytest
+          make install
+      - run: make lint
+      - run: make test
