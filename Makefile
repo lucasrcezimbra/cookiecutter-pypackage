@@ -1,4 +1,4 @@
-.PHONY: install lint test test-generated
+.PHONY: install lint test
 
 install:
 	poetry install --no-root
