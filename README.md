@@ -54,6 +54,6 @@ cruft create https://github.com/lucasrcezimbra/cookiecutter-pypackage
 ### Using Cookiecutter
 
 ```bash
-pip install -U cookiecutter
+pipx install cookiecutter
 cookiecutter https://github.com/lucasrcezimbra/cookiecutter-pypackage
 ```
