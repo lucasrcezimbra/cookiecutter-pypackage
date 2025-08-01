@@ -276,6 +276,10 @@ def test_cruft_integration(cookies):
     # Check that cruft documentation is in README
     readme = (result.project_path / "README.md").read_text()
     assert "cruft" in readme
-    assert "cruft check" in readme
-    assert "cruft update" in readme
+    assert "make update-template" in readme
     assert "cookiecutter-pypackage" in readme
+
+    # Check that update-template command is in Makefile
+    makefile = (result.project_path / "Makefile").read_text()
+    assert "update-template:" in makefile
+    assert "cruft update" in makefile

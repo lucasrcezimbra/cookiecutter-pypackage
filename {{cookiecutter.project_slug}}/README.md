@@ -45,11 +45,7 @@ make test
 This project was generated using [cookiecutter-pypackage](https://github.com/lucasrcezimbra/cookiecutter-pypackage). To update the project with the latest template changes, you can use [cruft](https://cruft.github.io/cruft/):
 
 ```bash
-# Check if the project is up-to-date with the template
-cruft check
-
-# Update the project with the latest template changes
-cruft update
+make update-template
 ```
 
-After running `cruft update`, review the changes and resolve any conflicts that may arise.
+After running `make update-template`, review the changes and resolve any conflicts that may arise.
