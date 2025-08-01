@@ -19,4 +19,4 @@ test-cov:
 {% endif %}
 
 update-template:
-	cruft update
+	poetry run cruft update
