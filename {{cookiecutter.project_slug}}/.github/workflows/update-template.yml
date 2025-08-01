@@ -19,7 +19,7 @@ jobs:
         with:
           token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
           commit-message: "chore: update template with cruft"
-          title: "Update {{ cookiecutter.project_name }} template with cruft"
+          title: "Update pypackage template with cruft"
           body: |
             This PR updates the project with the latest changes from the cookiecutter-pypackage template.
 
