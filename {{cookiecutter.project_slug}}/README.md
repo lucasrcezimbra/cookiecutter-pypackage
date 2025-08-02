@@ -39,3 +39,13 @@ cd {{ cookiecutter.project_slug }}
 make install
 make test
 ```
+
+### Keeping Up with Template Changes
+
+This project was generated using [cookiecutter-pypackage](https://github.com/lucasrcezimbra/cookiecutter-pypackage). To update the project with the latest template changes, you can use [cruft](https://cruft.github.io/cruft/):
+
+```bash
+make update-template
+```
+
+After running `make update-template`, review the changes and resolve any conflicts that may arise.
