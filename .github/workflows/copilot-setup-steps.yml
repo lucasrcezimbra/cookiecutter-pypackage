@@ -24,3 +24,5 @@ jobs:
           cache: "poetry"
       - name: Install dependencies
         run: make install
+      - name: install pypackage dependencies
+        run: make test-generated
