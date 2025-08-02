@@ -17,4 +17,3 @@ test:
 
 test-cov:
 	 poetry run pytest --cov=test_project
-
