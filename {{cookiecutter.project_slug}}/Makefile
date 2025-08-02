@@ -1,4 +1,4 @@
-.PHONY: build lint run test{% if cookiecutter.coverage == "Codecov" %} test-cov{% endif %}
+.PHONY: build lint run test{% if cookiecutter.coverage == "Codecov" %} test-cov{% endif %} update-template
 
 build:
 	poetry run python -m build
@@ -18,3 +18,6 @@ test:
 test-cov:
 	 poetry run pytest --cov={{cookiecutter.namespace}}
 {% endif %}
+
+update-template:
+	poetry run cruft update

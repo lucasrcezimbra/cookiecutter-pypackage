@@ -133,3 +133,4 @@ The following naming conventions are used in issues, PRs, docs, etc.:
 - Consider the generated project's needs, not this repository's runtime needs
 - Test both the template functionality and generated project quality
 - Respect the opinionated nature - maintain consistency with established patterns
+- Keep in mind external requests are blocked by GitHub Copilot firewall. If you need to install any dependencies, add it to the root `pyproject.toml` or edit the workflow `copilot-setup-steps.yml`, and ask me to retrigger the workflow.
