@@ -13,14 +13,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Install Poetry
-        run: pipx install poetry
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - run: pipx install poetry
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.9"
           cache: "poetry"
-      - name: Install dependencies
-        run: make install
+      - run: make install
+      - name: install pypackage dependencies
+        run: make test-generated

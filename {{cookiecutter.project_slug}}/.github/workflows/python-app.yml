@@ -22,6 +22,6 @@ jobs:
         with:
           token: {{ "${{ secrets.CODECOV_TOKEN }}" }}
           slug: {{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
-      {% else %}
+      {%- else %}
       - run: make test
       {%- endif %}

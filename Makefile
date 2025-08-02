@@ -10,3 +10,10 @@ lint:
 
 test:
 	poetry run pytest
+
+test-generated:
+	poetry run cookiecutter . --no-input
+	cd python_boilerplate/ && make install
+	cd python_boilerplate/ && make test
+	cd python_boilerplate/ && git init && git add . && make lint
+	rm -rf python_boilerplate/
