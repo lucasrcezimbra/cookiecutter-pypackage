@@ -229,8 +229,7 @@ def test_pyproject_dev_dependencies(cookies):
     assert expected in pyproject
 
 
-def test_pytest_deadfixtures_integration(cookies):
-    """Test that pytest-deadfixtures is included as a dev dependency and in lint command."""
+def test_pytest_deadfixtures(cookies):
     result = cookies.bake()
 
     pyproject = (result.project_path / "pyproject.toml").read_text()
