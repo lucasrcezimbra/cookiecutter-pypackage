@@ -233,11 +233,8 @@ def test_pytest_deadfixtures_integration(cookies):
     """Test that pytest-deadfixtures is included as a dev dependency and in lint command."""
     result = cookies.bake()
 
-    # Check that pytest-deadfixtures is in dev dependencies
     pyproject = (result.project_path / "pyproject.toml").read_text()
     assert 'pytest-deadfixtures = "2.2.1"' in pyproject
-
-    # Check that pytest-deadfixtures is in the lint command
     makefile = (result.project_path / "Makefile").read_text()
     assert "poetry run pytest --dead-fixtures" in makefile
 
