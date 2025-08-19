@@ -222,10 +222,20 @@ def test_pyproject_dev_dependencies(cookies):
         pre-commit = "3.7.0"
         pytest = "8.1.1"
         pytest-cov = "5.0.0"
+        pytest-deadfixtures = "2.2.1"
         pytest-mock = "3.14.0"
     """
     )
     assert expected in pyproject
+
+
+def test_pytest_deadfixtures(cookies):
+    result = cookies.bake()
+
+    pyproject = (result.project_path / "pyproject.toml").read_text()
+    assert 'pytest-deadfixtures = "2.2.1"' in pyproject
+    makefile = (result.project_path / "Makefile").read_text()
+    assert "poetry run pytest --dead-fixtures" in makefile
 
 
 def test_pyproject_docs_dependencies(cookies):
