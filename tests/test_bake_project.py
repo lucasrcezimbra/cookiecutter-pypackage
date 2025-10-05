@@ -47,23 +47,23 @@ def test_bake_selecting_license(cookies):
         (
             "GNU Lesser General Public License v2.1",
             "GNU LESSER GENERAL PUBLIC LICENSE",
-            "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
+            'license = "LGPL-2.1-only"',
         ),
         (
             "MIT license",
             "MIT ",
-            "License :: OSI Approved :: MIT License",
+            'license = "MIT"',
         ),
         (
             "GNU General Public License v3",
             "GNU GENERAL PUBLIC LICENSE",
-            "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+            'license = "GPL-3.0-only"',
         ),
     )
-    for license, target_string, classifier in license_strings:
+    for license, target_string, license_line in license_strings:
         result = cookies.bake(extra_context={"open_source_license": license})
         assert target_string in (result.project_path / "LICENSE").read_text()
-        assert classifier in (result.project_path / "pyproject.toml").read_text()
+        assert license_line in (result.project_path / "pyproject.toml").read_text()
 
 
 def test_bake_not_open_source(cookies):
@@ -167,29 +167,46 @@ def test_pyproject_tool_poetry(cookies, faker):
 
     pyproject = (result.project_path / "pyproject.toml").read_text()
 
-    expected = dedent(
+    # Check [project] section with PEP 621 metadata
+    expected_project = dedent(
         f"""\
-        [tool.poetry]
+        [project]
         name = "{context['project_slug']}"
-        description = "{context['project_short_description']}"
         version = "{context['version']}"
-        keywords = ["{context['project_slug']}"]
-        license = "LICENSE"
+        description = "{context['project_short_description']}"
         readme = "README.md"
-        include = ["LICENSE", "README.md"]
-        exclude = ["contrib", "docs", "test*"]
-        homepage = "https://github.com/{context['github_username']}/{context['project_slug']}"
-        documentation = "https://{context['project_slug']}.readthedocs.io/"
-        repository = "https://github.com/{context['github_username']}/{context['project_slug']}"
+        license = "LGPL-2.1-only"
         authors = [
-          "{context['full_name']} <{context['email']}>",
+          {{name = "{context['full_name']}", email = "{context['email']}"}}
         ]
-        packages = [
-          {{ include = "{context['namespace']}" }},
-        ]
+        keywords = ["{context['project_slug']}"]
     """
     )
-    assert expected in pyproject
+    assert expected_project in pyproject
+    
+    # Check [project.urls] section
+    expected_urls = dedent(
+        f"""\
+        [project.urls]
+        Homepage = "https://github.com/{context['github_username']}/{context['project_slug']}"
+        Documentation = "https://{context['project_slug']}.readthedocs.io/"
+        Repository = "https://github.com/{context['github_username']}/{context['project_slug']}"
+    """
+    )
+    assert expected_urls in pyproject
+
+    # Check [tool.poetry] section for Poetry-specific metadata
+    expected_poetry = dedent(
+        f"""\
+        [tool.poetry]
+        packages = [
+          {{ include = "{context['namespace']}" }}
+        ]
+        include = ["LICENSE", "README.md"]
+        exclude = ["contrib", "docs", "test*"]
+    """
+    )
+    assert expected_poetry in pyproject
 
 
 def test_pyproject_dependencies(cookies):
@@ -293,3 +310,23 @@ def test_cruft_integration(cookies):
     makefile = (result.project_path / "Makefile").read_text()
     assert "update-template:" in makefile
     assert "cruft update" in makefile
+
+
+def test_poetry_check_passes(cookies):
+    """Test that generated pyproject.toml passes poetry check with no warnings."""
+    result = cookies.bake()
+    
+    # Run poetry check on the generated project
+    import subprocess
+    check_result = subprocess.run(
+        ["poetry", "check"],
+        cwd=result.project_path,
+        capture_output=True,
+        text=True
+    )
+    
+    # Should exit with success
+    assert check_result.returncode == 0, f"poetry check failed: {check_result.stderr}"
+    
+    # Should not have warnings about deprecated fields
+    assert "deprecated" not in check_result.stdout.lower(), f"Found deprecation warnings: {check_result.stdout}"

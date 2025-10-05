@@ -1,51 +1,54 @@
-{%- set license_classifiers = {
-    'GNU Lesser General Public License v2.1': 'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
-    'MIT license': 'License :: OSI Approved :: MIT License',
-    'GNU General Public License v3': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
-} -%}
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[project]
+name = "{{ cookiecutter.project_slug }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.project_short_description }}"
+readme = "README.md"
+{%- if cookiecutter.open_source_license == 'MIT license' %}
+license = "MIT"
+{%- elif cookiecutter.open_source_license == 'GNU Lesser General Public License v2.1' %}
+license = "LGPL-2.1-only"
+{%- elif cookiecutter.open_source_license == 'GNU General Public License v3' %}
+license = "GPL-3.0-only"
+{%- endif %}
+authors = [
+  {name = "{{ cookiecutter.full_name.replace('\"', '\\\"') }}", email = "{{ cookiecutter.email }}"}
+]
+keywords = ["{{ cookiecutter.project_slug }}"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.9"
+dependencies = [
+{%- if cookiecutter.command_line_interface|lower == 'click' %}
+  "Click>=8.1.3",
+{%- endif %}
+]
 
+[project.urls]
+Homepage = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
+Documentation = "https://{{ cookiecutter.project_slug }}.readthedocs.io/"
+Repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
 
 [tool.poetry]
-name = "{{ cookiecutter.project_slug }}"
-description = "{{ cookiecutter.project_short_description }}"
-version = "{{ cookiecutter.version }}"
-keywords = ["{{ cookiecutter.project_slug }}"]
-license = "LICENSE"
-readme = "README.md"
+packages = [
+  { include = "{{ cookiecutter.namespace }}" }
+]
 include = ["LICENSE", "README.md"]
 exclude = ["contrib", "docs", "test*"]
-homepage = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
-documentation = "https://{{ cookiecutter.project_slug }}.readthedocs.io/"
-repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
-authors = [
-  "{{ cookiecutter.full_name.replace('\"', '\\\"') }} <{{ cookiecutter.email }}>",
-]
-packages = [
-  { include = "{{ cookiecutter.namespace }}" },
-]
-classifiers = [
-  'Development Status :: 2 - Pre-Alpha',
-  'Intended Audience :: Developers',
-{%- if cookiecutter.open_source_license in license_classifiers %}
-  '{{ license_classifiers[cookiecutter.open_source_license] }}',
-{%- endif %}
-  'Natural Language :: English',
-  'Programming Language :: Python :: 3',
-  'Programming Language :: Python :: 3.7',
-  'Programming Language :: Python :: 3.8',
-  'Programming Language :: Python :: 3.9',
-  'Programming Language :: Python :: 3.10',
-]
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-{%- if cookiecutter.command_line_interface|lower == 'click' %}
-Click = "8.1.3"
-{%- endif %}
 
 [tool.poetry.group.dev.dependencies]
 build = "1.2.1"
