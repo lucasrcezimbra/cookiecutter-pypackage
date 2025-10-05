@@ -183,7 +183,7 @@ def test_pyproject_tool_poetry(cookies, faker):
     """
     )
     assert expected_project in pyproject
-    
+
     # Check [project.urls] section
     expected_urls = dedent(
         f"""\
@@ -315,18 +315,18 @@ def test_cruft_integration(cookies):
 def test_poetry_check_passes(cookies):
     """Test that generated pyproject.toml passes poetry check with no warnings."""
     result = cookies.bake()
-    
+
     # Run poetry check on the generated project
     import subprocess
+
     check_result = subprocess.run(
-        ["poetry", "check"],
-        cwd=result.project_path,
-        capture_output=True,
-        text=True
+        ["poetry", "check"], cwd=result.project_path, capture_output=True, text=True
     )
-    
+
     # Should exit with success
     assert check_result.returncode == 0, f"poetry check failed: {check_result.stderr}"
-    
+
     # Should not have warnings about deprecated fields
-    assert "deprecated" not in check_result.stdout.lower(), f"Found deprecation warnings: {check_result.stdout}"
+    assert (
+        "deprecated" not in check_result.stdout.lower()
+    ), f"Found deprecation warnings: {check_result.stdout}"
